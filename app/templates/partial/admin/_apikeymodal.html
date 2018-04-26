@@ -1,0 +1,34 @@
+
+
+
+
+<div class="element-box">
+    <div class="table-responsive">
+        <table class="table ">
+
+            <tbody>
+            <tr>
+                <td  class="nowrap">API KEY</td>
+
+                <td style="padding-top:8.5%" class="text-center">
+              <div data-original-title="" title=""></div>
+                    {% if account %}
+                    <h4>
+                   {{ account.api_key}}
+                        </h4>
+                     {% else %}
+                      <h4>
+                  ----------------------
+                        </h4>
+                    {% endif %}
+
+                </td>
+                <td class="text-right"></td>
+            </tr>
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>

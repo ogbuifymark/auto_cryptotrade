@@ -1,0 +1,482 @@
+{% extends "Base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+
+
+<div class="content-panel-toggler"><i class="os-icon os-icon-grid-squares-22"></i><span>Sidebar</span>
+
+</div>
+<div class="content-i">
+    <div class="content-box">
+        <br>
+
+        <div class="row">
+            <div class="element-info-text " style="padding-left:35%">
+                <h2 class="element-inner-header"><i> Order Settings</i></h2>
+                <hr>
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <div class="row">
+
+
+            <div class="col-sm-4">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <form id="order_form">
+                            <div class="element-info">
+                                <div class="element-info-with-icon">
+                                    <div class="element-info-icon">
+                                        <div class="os-icon os-icon-wallet-loaded"></div>
+                                    </div>
+                                    <div class="element-info-text"><h5 class="element-inner-header ">&nbsp;&nbsp;&nbsp;&nbsp;Create
+                                        New Order</h5>
+                                        <div class="element-inner-desc">Validation of the API must have been done! <a
+                                                href="http://1000hz.github.io/bootstrap-validator/"
+                                                target="_blank"> Terms and Condition</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group"><label> Exchange Type</label><select id="exchange_type"
+                                                                                                 class="form-control"
+                                                                                                 onchange="getWallet()"
+                                                                                                 required>
+                                        {% if exchange_type_list %} {%
+                                        for exchangetype in exchange_type_list %}
+                                        <option class="selectoptiondropdown" value="{{ exchangetype.value }}">{{
+                                            exchangetype.text }}
+                                        </option>
+                                        {% endfor %} {% endif %}
+                                    </select></div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"><label> Select Wallet</label><select
+                                            class="form-control" onchange="getWalletBallance()" id="wallet" required>
+
+
+                                    </select></div>
+                                </div>
+                            </div>
+                            <legend><span></span></legend>
+                            <div class="form-group"><label>Wallet Balance</label><!--<input-->
+                                    <!--class="form-control" id="wallet_balance" type="text" readonly>-->
+                                <!--<div class="help-block form-text with-errors form-control-feedback"></div>-->
+                                <div class="element-box-tp">
+                                    <div class="alert alert-warning borderless row" style="padding-left:1%">
+                                        <div class="col-md-12"  style="color:white">
+                                            <p ><b id="currency_type_wallet">BTC/USD</b></p>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                        <a class="btn btn-white btn-sm"
+                                           style="padding-top:10px;padding-bottom:10px;" href="#">
+                                            <i class="os-icon os-icon-wallet-loaded"></i><span id="wallet_balance"
+                                                                                               style="font-size: 11px">
+                                            Select wallet
+                                        </span>
+                                            <br>
+                                            <br>
+                                            <i class="os-icon os-icon-wallet-loaded usd-class"></i><span
+                                                class="usd-class" id="available_amount"
+                                                style="font-size: 11px">
+                                            Select wallet
+                                        </span></a>
+
+                                        </div>
+
+                                        <div class="col-md-6 " style="padding-top:3px" >
+                                        <a class="btn btn-white btn-sm"
+                                           style="padding-top:10px;padding-bottom:10px;" href="#">
+                                            <span style="font-size: 11px" class="usd-class"  id="wallet_balance_usd">
+                                           ------------
+                                        </span>
+                                            <br>
+                                            <br>
+                                            <span
+                                                class="usd-class"
+                                                style="font-size: 11px" id="available_amount_usd">
+                                           ------------
+                                        </span></a>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           <legend><span></span></legend>
+                            <div class="row">
+                                 <div class="col-sm-6">
+                                <div class="form-group"><label> Market Type</label><select
+                                    class="form-control" id="market_type" onchange="getTicker()" required>
+                                {% if market_type_list %} {%
+                                for market_type in market_type_list %}
+                                <option class="selectoptiondropdown" value="{{ market_type.value }}">{{ market_type.text
+                                    }}
+                                </option>
+                                {% endfor %} {% endif %}
+
+                            </select></div>
+                                 </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"><label>Trade Amount(USD)</label><input
+                                            class="form-control number"  required maxlength="10" id="transaction_amount" >
+                                        <div class="help-block form-text with-errors form-control-feedback"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <legend><span></span></legend>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label> Min Ticker</label><input id="min_ticker" class="form-control number"  required
+                                                                                            >
+                                        <div class="help-block form-text with-errors form-control-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"><label>Max Ticker</label><input id="max_ticker"
+                                                                                            class="form-control number"
+
+                                                                                            required
+                                                                                            >
+                                        <div class="help-block form-text with-errors form-control-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            </fieldset>
+                            <div class="form-check"><label class="form-check-label"><input required
+                                                                                           class="form-check-input"
+                                                                                           type="checkbox">I agree to
+                                terms and conditions</label>
+                            </div>
+                            <div class="form-buttons-w">
+                                <button class="btn btn-primary" type="submit"> Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+
+                <div class="element-box"><h5 class="form-header">My Orders</h5>
+                    <div id="my_orders_table"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="floated-chat-btn"><i class="os-icon os-icon-mail-07"></i><span>Demo Chat</span></div>
+    <div class="floated-chat-w">
+        <div class="floated-chat-i">
+            <div class="chat-close"><i class="os-icon os-icon-close"></i></div>
+            <div class="chat-head">
+                <div class="user-w with-status status-green">
+                    <div class="user-avatar-w">
+                        <div class="user-avatar"><img alt="" src="img/avatar1.jpg"></div>
+                    </div>
+                    <div class="user-name"><h6 class="user-title">John Mayers</h6>
+                        <div class="user-role">Account Manager</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <div class="message">
+                    <div class="message-content">Hi, how can I help you?</div>
+                </div>
+                <div class="date-break">Mon 10:20am</div>
+                <div class="message">
+                    <div class="message-content">Hi, my name is Mike, I will be happy to assist you
+                    </div>
+                </div>
+                <div class="message self">
+                    <div class="message-content">Hi, I tried ordering this product and it keeps showing
+                        me error code.
+                    </div>
+                </div>
+            </div>
+            <div class="chat-controls"><input class="message-input"
+                                              placeholder="Type your message here..." type="text">
+                <div class="chat-extra"><a href="#"><span class="extra-tooltip">Attach Document</span><i
+                        class="os-icon os-icon-documents-07"></i></a><a href="#"><span
+                        class="extra-tooltip">Insert Photo</span><i
+                        class="os-icon os-icon-others-29"></i></a><a href="#"><span
+                        class="extra-tooltip">Upload Video</span><i
+                        class="os-icon os-icon-ui-51"></i></a></div>
+            </div>
+        </div>
+    </div><!--------------------
+END - Chat Popup Box
+--------------------></div><!--------------------
+START - Sidebar
+
+END - Sidebar
+--------------------></div>
+<input type="hidden" value="" id="ticker_id">
+
+<!--<script src="../static/bower_components/jquery/dist/jquery.min.js"></script>-->
+<script>
+$('.number').keydown(function (event){
+        // Allow special chars + arrows
+        if (event.keyCode == 46 ||event.keyCode == 191 || event.keyCode == 190 || event.keyCode == 8 || event.keyCode == 9
+            || event.keyCode == 27 || event.keyCode == 13
+            || (event.keyCode == 65 && event.ctrlKey === true)
+            || (event.keyCode >= 35 && event.keyCode <= 39)){
+            return;
+        } else {
+            // If it's not a number stop the keypress
+            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105))
+            {
+                event.preventDefault();
+            }
+        }
+    });
+
+
+
+
+
+ function formatMoneyNumber(value) {
+       	var num = value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+       	return num;
+       }
+
+var walletList="";
+function getWallet(){
+
+ var exchangeTypeId=$("#exchange_type").val();
+
+    $.ajax({
+		      url: '/settings/ordersettings/getwallet',
+		      type: "POST",
+		      dataType:"json",
+              data:{ exchangeTypeId:exchangeTypeId},
+		      success : function(walletlist){
+
+		      var options = [];
+			      var datalist = JSON.parse(walletlist);
+
+			      walletList=datalist;
+
+			      for(var i= 0; i < datalist.length; i++){
+			    	  options.push('<option  class="selectoptiondropdown" value="'+
+			    	  datalist[i].id +'">'+
+			    	 datalist[i].currencytype.description +'</option>');
+			      }
+			      $("#wallet").html(options.join(''));
+			      getWalletBallance();
+
+		       },
+		      error: function(data, errorThrown)
+		      {
+		    <!--alert(errorThrown)-->
+		      }
+		 });
+}
+
+
+currencysymbol="";
+function getWalletBallance(){
+var walletBalanceId=parseInt($("#wallet").val());
+ walletBalance="";
+  for(var i= 0; i < walletList.length; i++){
+			 if(walletList[i].id==walletBalanceId) {
+			 walletBalance=walletList[i];
+			 }
+			      }
+ currencysymbol=walletBalance.currencytype.symbol;
+ getBtcUsd();
+ $("#wallet_balance").text(walletBalance.total_amount.toFixed(5) +"("+walletBalance.currencytype.description +")");
+ $("#available_amount").text(walletBalance.available_amount.toFixed(5) +"("+walletBalance.currencytype.description +")");
+  $("#wallet_balance_usd").text("loading...");
+  $("#available_amount_usd").text("loading...");
+ $("#min_ticker").val("");
+ $("#max_ticker").val("");
+ $("#market_type").val($("#market_type option:first").val());
+ $("#currency_type_wallet").text(currencysymbol+"/"+"USD");
+			      }
+
+function getTicker(){
+var marketTypeId=$("#market_type").val();
+var wallet =$("#wallet").val();
+
+ if (wallet==null){
+ alert("Select ExchangeType");
+ return;
+ }
+
+
+
+
+ $.ajax({
+		      url: '/settings/ordersettings/getticker',
+		      type: "POST",
+		      dataType:"json",
+              data:{ marketTypeId:marketTypeId,wallet:wallet},
+		      success : function(tickerList){
+			      <!--$("#min_ticker").val(tickerList.min_amount);-->
+			      <!--$("#max_ticker").val(tickerList.max_amount);-->
+			      $("#ticker_id").val(tickerList.id);
+
+
+
+		       },
+		      error: function(data, errorThrown)
+		      {
+		    <!--alert(errorThrown)-->
+		      }
+		 });
+
+}
+ $('#order_form').submit(function () {
+
+		  var walletId = $("#wallet").val();
+		  var tickerId=$("#ticker_id").val();
+		  var transactionAmount=parseInt($("#transaction_amount").val());
+		  var minAmount= $("#min_ticker").val();
+		  var maxAmount=$("#max_ticker").val();
+		  if(transactionAmount==0){
+		  alert("Amount cannot be zero!")
+		  return false;
+		  }
+
+
+
+
+	      $.ajax({
+		       url: "/settings/ordersettings/create-order",
+		      type: "Post",
+		      data:{ tickerId:tickerId,walletId:walletId,transactionAmount:transactionAmount,minAmount:minAmount,maxAmount:maxAmount},
+		       beforeSend: function () {
+	  		           },
+
+	  		          complete: function () {
+
+	  		           },
+		      success : function(data) {
+		      getOrdersTable();
+		    	  if(data =="true"){
+                    alert("succesful");
+		    	  }
+		    	  else if(data =="false"){
+		    	  alert("Insufficient transaction amount!")
+		    	  }
+		    	  else{
+		    	  alert(data)
+		    	  }
+
+		      },
+		      error: function(data, errorThrown)
+		         {
+               alert(errorThrown);
+		         }
+
+		 });
+
+	      return false;
+	  });
+
+
+
+</script>
+
+
+<script>
+
+getOrdersTable();
+
+function getOrdersTable(){
+    $.ajax({
+		      url: '/settings/ordersettings/getorderstable',
+		      type: "GET",
+		      beforeSend: function (){
+
+              },
+            complete: function (){
+
+             },
+              //dataType: "json",
+		      success : function(data){
+		      $("#my_orders_table").html(data);
+		       },
+		      error: function(data, errorThrown)
+		      {
+		     error("error")
+		      }
+		 });
+}
+
+
+
+
+</script>
+
+
+
+<script>
+
+    function getBtcUsd(){
+var webSock = $.simpleWebSocket({ url: 'wss://api.bitfinex.com/ws/2' });
+    webSocket.listen(function(message) {
+        <!--console.log(message);-->
+    });
+
+    webSock.send({event: 'subscribe',channel: 'ticker',symbol: 't'+currencysymbol+'USD'}).listen(function(btcusData) {
+        var btcusdData = btcusData[1];
+        if(btcusdData instanceof Array){
+        console.log(btcusData)
+
+                if (btcusdData[6] < 1){
+
+                   var total=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#wallet_balance").text());
+                   var availableTotal=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#available_amount").text());
+                    $("#wallet_balance_usd").text(total.toFixed(3) + "(USD)");
+                     $("#available_amount_usd").text(availableTotal.toFixed(3) + "(USD)");
+                }
+                else{
+                    if (btcusdData[6] > 100){
+                     var total=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#wallet_balance").text());
+                     var availableTotal=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#available_amount").text());
+
+                        $("#wallet_balance_usd").text(total.toFixed(3) + "(USD)");
+                        $("#available_amount_usd").text(availableTotal.toFixed(3) + "(USD)");
+                    }else{
+                     var total=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#wallet_balance").text());
+                    var availableTotal=parseInt(btcusdData[6].toFixed(5).toLocaleString())*parseFloat($("#available_amount").text());
+                        $("#wallet_balance_usd").text(total.toFixed(3) + "(USD)");
+                        $("#available_amount_usd").text(availableTotal.toFixed(3) + "(USD)");
+                    }
+
+                }
+
+
+
+        }
+
+    }).fail(function(e) {
+        // error sending
+    });
+}
+
+</script>
+
+
+
+
+
+{% endblock %}

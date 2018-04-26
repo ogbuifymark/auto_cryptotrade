@@ -1,0 +1,71 @@
+                                            <div class="table-responsive" style="max-width: 100%;overflow: auto;">
+                                                <h6 style="text-align:center">{{tickerList[0].exchangetype.description|striptags|title}}</h6>
+                                                <table class="table table-lightborder">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>SYMBOL</th>
+                                                        <th>Min</th>
+                                                        <th>Max</th>
+                                                        <th>MKT</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% if tickerList|length %}
+                                                    {% for ticker in tickerList %}
+
+                                                        <tr>
+                                                            <td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">
+                                                                {{ ticker.currencytype.description }}
+                                                            </td>
+                                                            <td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">
+                                                                ${{ ticker.min_amount }}
+                                                            </td>
+                                                            <td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">
+                                                                ${{ ticker.max_amount }}
+                                                            </td>
+                                                            <td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">
+                                                                {{ ticker.markettype.description }}
+                                                            </td>
+                                                        </tr>
+
+
+
+                                                    {% endfor %}
+                                                    {% else %}
+                                                    <tr>
+                                                        <td>BTC</td>
+                                                        <td>$0</td>
+                                                        <td>
+                                                            $0
+                                                        </td>
+                                                        <!--<td class="text-center">-->
+                                                        <!--<input type="button" class="btn-primary btn-rounded btn-sm ticker" value="Set">-->
+                                                        <!--</td>-->
+                                                    </tr>
+                                                    <tr>
+                                                        <td>ETH</td>
+                                                        <td>$0</td>
+                                                        <td>
+                                                            $0
+                                                        </td>
+                                                        <!--<td class="text-center">-->
+                                                        <!--<input type="button" class="btn-primary btn-rounded btn-sm" value="Set">-->
+                                                        <!--</td>-->
+                                                    </tr>
+                                                    <tr>
+                                                        <td>USDT</td>
+                                                        <td>$0</td>
+                                                        <td>
+                                                            $0
+                                                        </td>
+                                                        <!--<td class="text-center">-->
+                                                        <!--<input type="button" class="btn-primary btn-rounded btn-sm" value="Set">-->
+                                                        <!--</td>-->
+                                                    </tr>
+                                                    {% endif %}
+
+
+                                                    </tbody>
+                                                </table>
+
+                                            </div>

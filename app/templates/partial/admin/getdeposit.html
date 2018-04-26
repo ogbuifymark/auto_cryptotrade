@@ -1,0 +1,128 @@
+
+<div class="onboarding-content with-gradient">
+                                <h4 class="onboarding-title">Deposit Request</h4>
+                                <div class="onboarding-text">A Small Deposit Fee is applied on deposits.
+                                </div>
+
+                                <form>
+                                    <div class="row">
+
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Exchange Type</label>
+                                                <select class="form-control" id="exchangetype">
+                                                    {% for exchangitem in exchangeTypeList %}
+                                                    <option class="selectoptiondropdown"
+                                                            value="{{ exchangitem.value }}">{{
+                                                        exchangitem.text }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>Currency Type</label>
+                                                <select class="form-control" id="currencytype">
+                                                    {% for curritem in currencyTypeList %}
+                                                    <option class="selectoptiondropdown" value="{{ curritem.value }}">{{
+                                                        curritem.text }}
+                                                    </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label>New Address</label>
+                                                <select class="form-control" id="renew">
+                                                    <option class="selectoptiondropdown"  value="0">no</option>
+                                                    <option class="selectoptiondropdown" value="1">yes</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button class="mr-2 mb-2 btn btn-primary" id="depositButton" type="button">
+                                               Deposit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+    <div class="form-group" style="display:none" id="wallatdiv">
+                                    <label >Copy Your Address:</label>
+                                    <div class="input-group">
+
+                                        <input class="form-control" id="walletAddress"
+                                        type="text" value="" readonly>
+                                        <button class=" btn btn-outline-primary input-group-addon" onclick="copyToClipboard()" >Copy </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                            function copyToClipboard(){
+        var address = $("#walletAddress").val();
+        $("#walletAddress").select();
+        document.execCommand("copy");
+        $.toast({
+            heading: 'Success',
+            text: 'Wallet Address Copied.',
+            showHideTransition: 'slide',
+            icon: 'success'
+        })
+      }
+        $(document).ready(function(){
+
+$("#depositButton").on('click',function(){
+            exchangetype= $("#exchangetype").val();
+            currencytype =$("#currencytype").val();
+            renew = $("#renew").val();
+            nonce = Date.now().toString();
+            if (exchangetype == 1){
+            urlapi = '/api/bitfinex_deposit'
+            }
+            else{
+                    urlapi= '/api/bitrex_deposit'
+            }
+                        $.ajax({
+                        type: 'POST',
+                        url: urlapi, // Calling json method
+                        traditional: true,
+                        data: { exchangetype:exchangetype, currencytype:currencytype,renew: renew ,nonce:nonce},
+                        beforeSend: function () {
+                            <!--$("#loadingImage").show();-->
+                        },
+                        complete: function () {
+                            <!--$("#loadingImage").hide();-->
+                        },
+                        success: function (message) {
+                            console.log(message);
+                            if (message == "False"){
+                            alert('Something went wrong' )
+                            } else{
+                                response = JSON.parse(message);
+                                $("#walletAddress").val(response.address);
+                                $("#defaultimage").hide();
+                                srcvalue = '{{ qrcode(' + response.address+')}}'
+                                $("#qrcstring").attr("src",srcvalue )
+                                $("#qrcstring").show();
+                                $("#wallatdiv").show();
+                            }
+                        },
+                        error: function (ex) {
+                            <!--swal("Error",'Operation Failed',"error");-->
+                        }
+                    });
+
+      });
+
+
+
+        });
+
+
+
+
+
+
+
+</script>

@@ -1,0 +1,169 @@
+<div class="onboarding-content with-gradient">
+    <h4 class="onboarding-title">Withdrawal Request </h4>
+    <div class="alert alert-warning alert-dismissible fade show message" role="alert" style="display:none"id="messageDisplay" >
+
+    </div>
+    <div class="onboarding-text">
+        Provide the wallet destination and all the required information to withdraw your fund. a small transaction fee will be applied.
+    </div>
+    <form>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Exchange Type</label>
+                    <!--<select class="form-control">-->
+                    <!--<option>Web Developer</option>-->
+                    <!--<option>Business Owner</option>-->
+                    <!--<option>Other</option>-->
+                    <!--</select>-->
+                    <select class="form-control" id="dithexchangetype" required="required">
+                        {% for withexchangitem in exchangeTypeList %}
+                        <option class="selectoptiondropdown"
+                                value="{{ withexchangitem.value }}">{{
+                            withexchangitem.text }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Currency Type</label>
+                    <!--<select class="form-control">-->
+                    <!--<option>Web Developer</option>-->
+                    <!--<option>Business Owner</option>-->
+                    <!--<option>Other</option>-->
+                    <!--</select>-->
+                    <select class="form-control" id="withcurrencytype" required="required">
+                        {% for withcurritem in currencyTypeList %}
+                        <option class="selectoptiondropdown" value="{{ withcurritem.value }}">{{
+                            withcurritem.text }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Wallet Type</label>
+                    <!--<select class="form-control">-->
+                    <!--<option>Web Developer</option>-->
+                    <!--<option>Business Owner</option>-->
+                    <!--<option>Other</option>-->
+                    <!--</select>-->
+                    <select class="form-control" id="withwallettype" required="required">
+                        {% for withwalletitem in walletTypeList %}
+                        <option class="selectoptiondropdown" value="{{ withwalletitem.value }}">{{
+                            withwalletitem.text }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input class="form-control" placeholder="e.g. $200" id="amount"
+                           type="number" value="" required="required">
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+                <div class="form-group">
+                    <label>Wallet Address</label>
+                    <input class="form-control" placeholder="e.g. 9jknkjwknjgrnjnjnsljnsjnjjn" id="wallet-address"
+                           type="text" value="" required="required">
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-sm-4">
+                <button class="mr-2 mb-2 btn btn-primary" id="withdrawalButton" type="button">
+                   WithDraw
+                </button>
+
+            </div>
+             <div class="col-sm-4">
+                <i class="fa fa-spinner fa-spin fa-2x" style="display:none" id="loadingimage"></i>
+                <!--<img src="../static/img/ajax-loading-gif-3.gif" width="20" style="display:none" id="loadingimage">-->
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+                            function copyToClipboard(){
+        var address = $("#walletAddress").val();
+        $("#walletAddress").select();
+        document.execCommand("copy");
+        $.toast({
+            heading: 'Success',
+            text: 'Wallet Address Copied.',
+            showHideTransition: 'slide',
+            icon: 'success'
+        })
+      }
+        $(document).ready(function(){
+
+$("#withdrawalButton").on('click',function(){
+    $(this).prop('disabled', true);
+            dithexchangetype= $("#dithexchangetype").val();
+            withcurrencytype =$("#withcurrencytype").val();
+            amount = $("#amount").val();
+            walletaddress =$("#wallet-address").val();
+            withwallettype =$("#withwallettype").val();
+            var t = new Date();
+            console.log(t);
+            nonce = Date.now().toString();
+            nonce2 = t.setSeconds(t.getSeconds() +2).toString();
+            if (dithexchangetype == 1){
+            urlapi = '/api/bitfinex_withdrawal'
+            }
+            else{
+                    urlapi= '/api/bitrex_deposit'
+            }
+                        $.ajax({
+                        type: 'POST',
+                        url: urlapi, // Calling json method
+                        traditional: true,
+                        data: { dithexchangetype:dithexchangetype, withcurrencytype:withcurrencytype,amount: amount,walletaddress:walletaddress ,nonce: nonce,withwallettype:withwallettype,nonce2:nonce2 },
+                        beforeSend: function () {
+                            $("#loadingimage").show();
+                        },
+                        complete: function () {
+                            $("#loadingimage").hide();
+                        },
+                        success: function (message) {
+                        $("#withdrawalButton").prop('disabled', false);
+                            if (message == "False"){
+                            alert('something is wrong' )
+                            } else{
+                                response = JSON.parse(message)
+                                $("#messageDisplay").html(response[0].message);
+                                $(".message").show();
+                            }
+                        },
+                        error: function (ex) {
+                        $(this).prop('disabled', false);
+                            <!--swal("Error",'Operation Failed',"error");-->
+                        }
+                    });
+
+      });
+
+
+
+        });
+
+
+
+
+
+
+
+
+</script>

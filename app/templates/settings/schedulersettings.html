@@ -1,0 +1,224 @@
+{% extends "Base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+
+
+<div class="content-panel-toggler"><i class="os-icon os-icon-grid-squares-22"></i><span>Sidebar</span>
+
+</div>
+<div class="content-i">
+    <div class="content-box">
+        <br>
+
+        <div class="row">
+            <div class="element-info-text " style="padding-left:35%">
+                <h2 class="element-inner-header"><i> Scheduler Settings</i></h2>
+                <hr>
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <div class="row">
+
+
+            <div class="col-sm-4">
+                <div class="element-wrapper">
+                    <div class="element-box">
+                        <form id="job_form">
+                            <div class="element-info">
+                                <div class="element-info-with-icon">
+                                    <div class="element-info-icon">
+                                        <div class="os-icon os-icon-wallet-loaded"></div>
+                                    </div>
+                                    <div class="element-info-text"><h5 class="element-inner-header ">&nbsp;Create
+                                        New Job</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <legend><span></span></legend>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label> Job Name</label><input id="job_name" class="form-control"  required
+                                                                                            >
+                                        <div class="help-block form-text with-errors form-control-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group"><label>Interval(Seconds)</label><input id="interval" maxlength="5"
+                                                                                            class="form-control number"
+
+                                                                                            required
+                                                                                            >
+                                        <div class="help-block form-text with-errors form-control-feedback"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            </fieldset>
+                            <br>
+
+                            <div class="form-buttons-w " >
+                                <button class="btn btn-primary" type="submit"> Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8">
+
+                <div class="element-box"><h5 class="form-header">My Jobs</h5>
+                    <div id="my_orders_table"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="floated-chat-btn"><i class="os-icon os-icon-mail-07"></i><span>Demo Chat</span></div>
+    <div class="floated-chat-w">
+        <div class="floated-chat-i">
+            <div class="chat-close"><i class="os-icon os-icon-close"></i></div>
+            <div class="chat-head">
+                <div class="user-w with-status status-green">
+                    <div class="user-avatar-w">
+                        <div class="user-avatar"><img alt="" src="img/avatar1.jpg"></div>
+                    </div>
+                    <div class="user-name"><h6 class="user-title">John Mayers</h6>
+                        <div class="user-role">Account Manager</div>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-messages">
+                <div class="message">
+                    <div class="message-content">Hi, how can I help you?</div>
+                </div>
+                <div class="date-break">Mon 10:20am</div>
+                <div class="message">
+                    <div class="message-content">Hi, my name is Mike, I will be happy to assist you
+                    </div>
+                </div>
+                <div class="message self">
+                    <div class="message-content">Hi, I tried ordering this product and it keeps showing
+                        me error code.
+                    </div>
+                </div>
+            </div>
+            <div class="chat-controls"><input class="message-input"
+                                              placeholder="Type your message here..." type="text">
+                <div class="chat-extra"><a href="#"><span class="extra-tooltip">Attach Document</span><i
+                        class="os-icon os-icon-documents-07"></i></a><a href="#"><span
+                        class="extra-tooltip">Insert Photo</span><i
+                        class="os-icon os-icon-others-29"></i></a><a href="#"><span
+                        class="extra-tooltip">Upload Video</span><i
+                        class="os-icon os-icon-ui-51"></i></a></div>
+            </div>
+        </div>
+    </div><!--------------------
+END - Chat Popup Box
+--------------------></div><!--------------------
+START - Sidebar
+
+END - Sidebar
+--------------------></div>
+<input type="hidden" value="" id="ticker_id">
+
+<!--<script src="../static/bower_components/jquery/dist/jquery.min.js"></script>-->
+<script>
+$('.number').keydown(function (event){
+        // Allow special chars + arrows
+        if (event.keyCode == 46 ||event.keyCode == 191 || event.keyCode == 190 || event.keyCode == 8 || event.keyCode == 9
+            || event.keyCode == 27 || event.keyCode == 13
+            || (event.keyCode == 65 && event.ctrlKey === true)
+            || (event.keyCode >= 35 && event.keyCode <= 39)){
+            return;
+        } else {
+            // If it's not a number stop the keypress
+            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105))
+            {
+                event.preventDefault();
+            }
+        }
+    });
+
+ $('#job_form').submit(function () {
+
+		  var jobName = $("#job_name").val();
+		  var interval=$("#interval").val();
+
+	      $.ajax({
+		       url: "/settings/schedularsettings/create-job",
+		      type: "Post",
+		      data:{ jobName:jobName,interval:interval},
+		      beforeSend: function () {
+	  		           },
+
+	  		          complete: function () {
+
+	  		           },
+		      success : function(data) {
+
+		    	  if(data =="true"){
+		    	  getJobsTable();
+                    alert("Job create successfully");
+		    	  }
+		    	  else{
+		    	  alert(data)
+		    	  }
+
+		      },
+		      error: function(data, errorThrown)
+		         {
+               alert(errorThrown);
+		         }
+
+		 });
+
+	      return false;
+	  });
+
+
+getJobsTable();
+
+function getJobsTable(){
+    $.ajax({
+		      url: '/settings/schedularsettings/job-table',
+		      type: "GET",
+		      beforeSend: function (){
+
+              },
+            complete: function (){
+
+             },
+              //dataType: "json",
+		      success : function(data){
+		      $("#my_orders_table").html(data);
+		       },
+		      error: function(data, errorThrown)
+		      {
+		     error("error")
+		      }
+		 });
+}
+</script>
+
+
+
+
+
+
+
+{% endblock %}

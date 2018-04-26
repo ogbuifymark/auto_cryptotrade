@@ -1,0 +1,33 @@
+
+                                <div class="table-responsive" style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width 100%; overflow: auto;  ">
+                                    <table   width="100%" class="table table-striped table-lightfont ">
+                                        <thead>
+                                        <tr>
+                                            <th><b>Order Date</b></th>
+                                            <th><b>Ref Number</b></th>
+                                            <th><b>Status</b></th>
+
+
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% if orderPaymentList %}
+                                        {%
+                                for order in orderPaymentList %}
+                                        <tr>
+                                            <td>{{order.date_time}}</td>
+                                             <td>{{order.order_ref}}</td>
+                                            {%if order.status=="Running..."%}
+                                             <td><a class="btn btn-sm btn-primary" >
+                                                 {%else%}
+                                            <td><a class="btn btn-sm btn-danger" >
+                                            {% endif %}
+                                                 {{order.status}}</a></td>
+                                        </tr>
+                                        {% endfor%}
+                                         {% endif%}
+
+                                        </tbody>
+                                    </table>
+                                </div>

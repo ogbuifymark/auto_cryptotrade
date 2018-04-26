@@ -1,0 +1,19 @@
+__author__ = 'markugo'
+from app import create_app, socketio
+from app.models import db
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+
+app = create_app('development')
+manager = Manager(app)
+migrate = Migrate(app, db)
+manager.add_command('db', MigrateCommand)
+
+if __name__ == '__main__':
+<<<<<<< working copy
+    # manager.run()
+    #app.run( daebug=True, port=5564)
+    socketio.run(app, debug=True, port=5564)
+=======
+     #manager.run()
+    app.run(debug=True, port=5564)>>>>>>> merge rev

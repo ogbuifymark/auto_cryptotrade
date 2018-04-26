@@ -1,0 +1,119 @@
+<div class="row">
+
+
+        <div class="col-sm-6">
+                                 <div class="table-responsive" style="max-width: 100%;overflow: auto;">
+    <h6>BID</h6>
+
+        <table class="table table-lightborder" id="bidingtable">
+        <thead>
+
+        <tr>
+            <th>Count</th>
+            <th>Amount</th>
+            <th>Total</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody id="bidtable">
+
+        <!--<tr>-->
+            <!--<td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">-->
+            <!--</td>-->
+            <!--<td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">-->
+            <!--</td>-->
+            <!--<td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">-->
+            <!--</td>-->
+            <!--<td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">-->
+            <!--</td>-->
+        <!--</tr>-->
+
+
+
+
+        </tbody>
+    </table>
+    </div>
+
+
+</div>
+
+    <div class="col-sm-6">
+                                         <div class="table-responsive" style="max-width: 100%;overflow: auto;">
+        <h6>ASK</h6>
+            <table class="table table-lightborder" id="askingtable">
+        <thead>
+
+        <tr>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Amount</th>
+            <th>Count</th>
+        </tr>
+        </thead>
+        <tbody id="asktable">
+
+
+
+
+        </tbody>
+    </table>
+    </div>
+</div>
+
+</div>
+<script>
+    var webSocket50 = $.simpleWebSocket({ url: 'wss://api.bitfinex.com/ws/2' });
+    webSocket50.listen(function(message) {
+    });
+
+    webSocket50.send({event: 'subscribe',channel: 'book',symbol: 'tBTCUSD',"prec":"P0","freq":"F1","len":"25"}).listen(function(orderbook) {
+        if(orderbook[1] instanceof Array){
+        console.log(orderbook[1])
+        bidorderbook = orderbook[1]
+        askorderbook = orderbook[1]
+        bidtableValue = [];
+        asktableValue = [];
+        if (orderbook[1].length >3){
+            for(var i= 0; i < bidorderbook.length; i++){
+                if(bidorderbook[i][2] >0){
+                    $('<tr><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="bidorderbook[i][2]">' +bidorderbook[i][1]  + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="bidorderbook[i][2]">'+ bidorderbook[i][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="bidorderbook[i][2]">'+ bidorderbook[i][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="bidorderbook[i][2]">'+ bidorderbook[i][0]+'</a></td></tr>').prependTo("#bidtable");
+
+                }
+                else{
+                    $('<tr><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="askorderbook[i][2]">' + askorderbook[i][0] + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="askorderbook[i][2]">'+ Math.abs(askorderbook[i][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="askorderbook[i][2]">'+ Math.abs(askorderbook[i][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="askorderbook[i][2]">'+ askorderbook[i][1] +'</a></td></tr>').prependTo("#asktable");
+                }
+            }
+        }
+        else{
+            if(orderbook[1][2] > 0){
+             var countbid = $("#bidingtable tr").length
+                if (countbid > 25){
+                      $("#bidingtable tr:last").remove();
+                    $('<tr ><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">' +orderbook[1][1]  + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][0]+'</a></td></tr>').prependTo("#bidtable");
+                }
+                else{
+                    $('<tr ><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">' +orderbook[1][1]  + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][2]+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][0]+'</a></td></tr>').prependTo("#bidtable");
+                }
+            }
+            else{
+            var countask = $("#askingtable tr").length
+                if(countask > 25){
+                    $("#askingtable tr:last").remove();
+                    $('<tr ><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">' + orderbook[1][0] + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ Math.abs(orderbook[1][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ Math.abs(orderbook[1][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][1] +'</a></td></tr>').prependTo("#asktable");
+                }
+                else{
+                    $('<tr ><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">' + orderbook[1][0] + '</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" value=""><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ Math.abs(orderbook[1][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ Math.abs(orderbook[1][2])+'</a></td><td style="font-size:0.7em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a href="#" style="color:white" class="orderbooking" id="orderbook[i][2]">'+ orderbook[1][1] +'</a></td></tr>').prependTo("#asktable");
+                }
+            }
+        }
+    }
+
+    }).fail(function(e) {
+       console.log(e)
+    })
+    $(".orderbooking").click(function (){
+    alert("hello");
+});
+
+</script>

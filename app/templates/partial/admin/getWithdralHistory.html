@@ -1,0 +1,56 @@
+<h6 class="element-header">{{exchangetype}} {{currency}} Deposit-Withdrawal History</h6>
+                    <div class="element-box">
+                        <div class="os-tabs-w">
+                           <div class="table-responsive" style="max-width: 100%;overflow: auto;">
+                                    <table id="my_orders_table"  width="100%" class="table table-striped table-lightfont ">
+                                        <thead>
+                                        <tr>
+                                            <th><b>Id</b></th>
+                                            <th><b> Type</b></th>
+                                             <th><b>Date</b></th>
+                                            <th><b>Time</b></th>
+                                            <th><b>Amount</b></th>
+                                            <th><b>Status</b></th>
+                                            <th><b> Fee </b></th>
+                                            <th><b> Means </b></th>
+
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        {% if withdrawalList %}
+                                        {% for withdrawal in withdrawalList %}
+                                        <tr>
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">{{withdrawal['id']}}</td>
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">{{withdrawal['type']}}</td>
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">{{withdrawal['date']}}</td>
+                                             <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">{{withdrawal['time']}}</td>
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;" >{{withdrawal['amount']}} {{currency}}</td>
+
+                                            {%if withdrawal['status']=="COMPLETED"%}
+                                             <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a class="btn btn-sm btn-primary" >
+                                                 {%else%}
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a class="btn btn-sm btn-danger" >
+                                            {% endif %}
+                                                 {{withdrawal['status']}}</a></td>
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;">{{withdrawal['fee']}}</td>
+                                            {%if withdrawal['flag']== '(1,)'%}
+                                             <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"><a class="btn btn-sm btn-primary" >
+                                                 Internal</a></td>
+                                                 {%else%}
+                                            <td style="font-size:0.8em; line-height:10px;border-top-color:rgba(83,101,140,0.08);max-width:60px; padding:3px 0px 3px 0px;"   ><a class="btn btn-sm btn-danger" >
+                                                External</a></td>
+                                            {% endif %}
+
+
+
+                                        </tr>
+                                        {% endfor%}
+                                         {% endif%}
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                        </div>
+                    </div>
