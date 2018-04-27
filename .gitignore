@@ -1,1 +1,7 @@
-/app/static/js/node_modules
+/app/static/js
+/.hg
+/.idea
+/app/Util
+/app/BitfinanceBuisnessLogic
+/app/BittrexBuisnessLogic
+/app/rest_api
